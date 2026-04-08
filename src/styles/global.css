@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+@theme {
+    /* --- PALETA BASE: HYPER-SENSE CORE --- */
+
+    /* Color de Acción (Inspirado en el rojo de Daredevil/Spidey) */
+    --color-action-primary: #D00000;
+    /* Rojo vibrante pero profesional */
+    --color-action-secondary: #1E293B;
+    /* Azul pizarra muy oscuro (Casi negro) */
+    --color-action-accent: #FFD700;
+    /* Amarillo rayo (Flash) para detalles mínimos */
+
+    /* Colores de Superficie (Limpieza y Profundidad) */
+    --color-surface-900: #0F172A;
+    /* Fondo profundo (Modo Noche) */
+    --color-surface-800: #1E293B;
+    /* Tarjetas y secciones */
+    --color-surface-100: #F8FAFC;
+    /* Texto principal en modo oscuro o fondo en modo claro */
+
+    /* Colores de Estado */
+    --color-status-success: #10B981;
+    --color-status-error: #EF4444;
+
+    /* Tipografía Escala */
+    --font-display: "Inter", system-ui, sans-serif;
+}

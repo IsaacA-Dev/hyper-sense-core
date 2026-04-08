@@ -1,17 +1,48 @@
 ---
-
+// Obtener la ruta base automáticamente (ej: /hyper-sense-core)
+const base = import.meta.env.BASE_URL;
 ---
 
-<html lang="en">
+<html lang="es">
 	<head>
 		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
+		<link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
+		<link rel="icon" href={`${base}/favicon.ico`} />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
+		<title>Hyper-Sense Core | Vigil Axis</title>
 	</head>
-	<body>
-		<h1>Astro</h1>
+	<body class="bg-surface-900 text-surface-100 font-display selection:bg-action-primary/30">
+		
+		<main class="min-h-screen flex flex-col items-center justify-center p-6 text-center">
+			
+			<div class="flex items-center gap-2 mb-8 bg-surface-800 border border-white/10 px-4 py-1.5 rounded-full shadow-xl">
+				<span class="relative flex h-2 w-2">
+					<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-action-primary opacity-75"></span>
+					<span class="relative inline-flex rounded-full h-2 w-2 bg-action-primary"></span>
+				</span>
+				<span class="text-[10px] font-mono uppercase tracking-[0.2em] text-slate-400">Core Engine Active</span>
+			</div>
+
+			<h1 class="text-6xl md:text-8xl font-black tracking-tighter mb-4 italic">
+				HYPER<span class="text-action-primary">-SENSE</span>
+			</h1>
+			
+			<p class="max-w-xl text-slate-400 text-lg md:text-xl font-light mb-10 leading-relaxed">
+				Estructura base para despliegue de <span class="text-white font-medium">Sitios Estáticos</span> con branding de alta precisión.
+			</p>
+
+			<div class="flex flex-col sm:flex-row gap-4">
+				<a href="#" class="bg-action-primary text-white px-8 py-3 rounded-xl font-bold hover:scale-105 transition-transform shadow-lg shadow-action-primary/20">
+					Ver Stack Técnico
+				</a>
+				<a href="#" class="bg-surface-800 border border-white/10 text-white px-8 py-3 rounded-xl font-bold hover:bg-surface-700 transition-colors">
+					Documentación
+				</a>
+			</div>
+
+			<div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-action-primary to-transparent opacity-20"></div>
+		</main>
+
 	</body>
 </html>
