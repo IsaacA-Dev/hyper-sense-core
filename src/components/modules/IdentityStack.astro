@@ -18,19 +18,19 @@ const { id, data } = Astro.props;
 <section {id} class="py-40 px-6 relative overflow-hidden">
 	<div class="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
 		
-		<div class="relative order-2 lg:order-1">
+		<div class="relative order-2 lg:order-1 mt-12 lg:mt-0">
 			<!-- Stack of images / effects -->
 			<div class="relative z-10 rounded-3xl overflow-hidden aspect-video tactical-border shadow-2xl">
 				<img {src}={resolvePath(data.image)} alt="Identity" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000" />
 			</div>
 			
-			<div class="absolute -top-10 -left-10 w-full h-full bg-primary/2 rounded-3xl -z-10 rotate-3"></div>
+			<div class="absolute -top-6 -left-6 md:-top-10 md:-left-10 w-full h-full bg-primary/2 rounded-3xl -z-10 rotate-3"></div>
 			<div class="absolute inset-0 bg-gradient-to-t from-bg via-transparent to-transparent z-20"></div>
 
 			<!-- Dynamic Badge Overlay -->
-			<div class="absolute -bottom-6 -right-6 glass p-6 rounded-2xl z-30 max-w-[200px] animate-bounce duration-[3000ms]">
-				<p class="text-[10px] font-mono uppercase tracking-widest text-primary mb-1">Status Code</p>
-				<p class="text-lg font-black italic tracking-tighter uppercase leading-none">Security Verified</p>
+			<div class="absolute -bottom-4 -right-4 md:-bottom-6 md:-right-6 glass p-4 md:p-6 rounded-2xl z-30 max-w-[160px] md:max-w-[200px] animate-bounce duration-[3000ms]">
+				<p class="text-[8px] md:text-[10px] font-mono uppercase tracking-widest text-primary mb-1">Status Code</p>
+				<p class="text-sm md:text-lg font-black italic tracking-tighter uppercase leading-none">Security Verified</p>
 			</div>
 		</div>
 
