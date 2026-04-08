@@ -18,28 +18,64 @@
         color-scheme: dark;
     }
 
+    /* Light Theme Variables */
+    :root.light {
+        color-scheme: light;
+        --brand-background: #F8FAFC;
+        --brand-text: #0F172A;
+        --brand-surface: #FFFFFF;
+        --brand-primary: #E11D48; /* Redefine if needed for contrast */
+        --brand-secondary: #F1F5F9;
+        /* Subtle adjustments for light mode */
+        --white-10: rgba(0, 0, 0, 0.05);
+        --white-5: rgba(0, 0, 0, 0.03);
+    }
+
+    :root:not(.light) {
+        --white-10: rgba(255, 255, 255, 0.1);
+        --white-5: rgba(255, 255, 255, 0.05);
+    }
+
+    html {
+        transition: background-color 0.4s ease, color 0.4s ease;
+    }
+
     body {
         @apply bg-bg text-txt antialiased selection:bg-primary/30;
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
     }
 
     /* Custom tactical scrollbar */
     ::-webkit-scrollbar {
-        width: 8px;
+        width: 6px;
     }
     ::-webkit-scrollbar-track {
         @apply bg-bg;
     }
     ::-webkit-scrollbar-thumb {
-        @apply bg-white/5 border-2 border-transparent bg-clip-padding rounded-full hover:bg-primary/40;
+        @apply bg-primary/20 rounded-full hover:bg-primary/40 transition-colors;
     }
 }
 
 @layer components {
     .glass {
-        @apply bg-white/[0.02] backdrop-blur-xl border border-white/[0.05] shadow-2xl;
+        @apply backdrop-blur-xl border shadow-2xl transition-all duration-300;
+        background: var(--white-5);
+        border-color: var(--white-10);
     }
     
     .tactical-border {
-        @apply border border-white/[0.05] hover:border-primary/30 transition-colors duration-500;
+        @apply border transition-colors duration-500;
+        border-color: var(--white-10);
+    }
+
+    .tactical-border:hover {
+        @apply border-primary/30;
+    }
+
+    /* Optimized for light/dark */
+    .text-muted {
+        @apply opacity-40;
     }
 }

@@ -10,40 +10,45 @@ interface Props {
 const { id, data } = Astro.props;
 ---
 
-<section {id} class="py-32 px-6 bg-brand-secondary/30 relative">
-	<div class="container mx-auto">
-		<div class="text-center mb-24">
-			<h2 class="text-4xl md:text-5xl font-black italic uppercase tracking-widest mb-4">
+<section {id} class="py-20 md:py-32 bg-black/[0.02] dark:bg-white/[0.02] relative overflow-hidden">
+	<div class="container mx-auto px-4 md:px-6">
+		<div class="text-center mb-16 md:mb-24">
+			<h2 class="text-3xl md:text-5xl font-black italic uppercase tracking-widest mb-4">
 				{data.title}
 			</h2>
-			<p class="text-[10px] font-mono uppercase tracking-[0.5em] text-primary">Performance Monitoring</p>
+			<p class="text-[9px] md:text-[10px] font-mono uppercase tracking-[0.4em] md:tracking-[0.5em] text-primary">Performance Monitoring</p>
 		</div>
 
-		<div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+		<div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-12">
 			{data.stats.map(stat => (
 				<div class="text-center group">
-					<div class="inline-block mb-8 relative">
-						<svg class="w-32 h-32 -rotate-90">
+					<div class="inline-block mb-6 md:mb-8 relative">
+						<svg class="w-24 h-24 md:w-32 md:h-32 -rotate-90">
 							<circle 
-								cx="64" cy="64" r="60" 
-								class="stroke-white/5 fill-none" 
-								stroke-width="4" 
+								cx="48" cy="48" r="44" md:cx="64" md:cy="64" md:r="60"
+								class="stroke-black/5 dark:stroke-white/5 fill-none" 
+								stroke-width="3" md:stroke-width="4" 
+								style="cx: var(--cx); cy: var(--cy); r: var(--r);"
 							/>
 							<circle 
-								cx="64" cy="64" r="60" 
+								cx="48" cy="48" r="44" md:cx="64" md:cy="64" md:r="60"
 								class="stroke-primary fill-none transition-all duration-[2000ms] ease-out" 
-								stroke-width="4" 
-								stroke-dasharray="377" 
-								stroke-dashoffset={`${377 - (377 * stat.progress) / 100}`}
+								stroke-width="3" md:stroke-width="4" 
+								stroke-dasharray="276" md:stroke-dasharray="377" 
+								stroke-dashoffset="0"
+								data-progress={stat.progress}
+								class="progress-circle"
 								stroke-linecap="round"
+								style="cx: var(--cx); cy: var(--cy); r: var(--r);"
 							/>
 						</svg>
+						<!-- Fallback simplified SVG for easier CSS control -->
 						<div class="absolute inset-0 flex items-center justify-center flex-col">
-							<span class="text-3xl font-black italic leading-none counter" data-target={stat.value}>0</span>
-							<span class="text-[10px] font-bold text-primary">{stat.suffix}</span>
+							<span class="text-2xl md:text-3xl font-black italic leading-none counter" data-target={stat.value}>0</span>
+							<span class="text-[9px] md:text-[10px] font-bold text-primary">{stat.suffix}</span>
 						</div>
 					</div>
-					<h3 class="text-xs uppercase tracking-[0.3em] font-medium text-txt/40 group-hover:text-txt transition-colors">
+					<h3 class="text-[10px] md:text-xs uppercase tracking-[0.2em] md:tracking-[0.3em] font-medium text-txt/50 group-hover:text-primary transition-colors">
 						{stat.label}
 					</h3>
 				</div>
@@ -52,20 +57,56 @@ const { id, data } = Astro.props;
 	</div>
 </section>
 
+<style>
+	/* Responsive SVG Vars */
+	svg {
+		--cx: 48;
+		--cy: 48;
+		--r: 44;
+	}
+	@media (min-width: 768px) {
+		svg {
+			--cx: 64;
+			--cy: 64;
+			--r: 60;
+		}
+	}
+
+	.progress-circle {
+		stroke-dashoffset: 276; /* hidden by default */
+	}
+	@media (min-width: 768px) {
+		.progress-circle {
+			stroke-dashoffset: 377;
+		}
+	}
+</style>
+
 <script is:inline>
 	const observer = new IntersectionObserver((entries) => {
 		entries.forEach(entry => {
 			if (entry.isIntersecting) {
 				const counters = entry.target.querySelectorAll('.counter');
+				const circles = entry.target.querySelectorAll('.progress-circle');
+				
+				circles.forEach(circle => {
+					const progress = circle.getAttribute('data-progress');
+					const isMobile = window.innerWidth < 768;
+					const circumference = isMobile ? 276 : 377;
+					const offset = circumference - (circumference * progress) / 100;
+					circle.style.strokeDashoffset = offset;
+					circle.style.strokeDasharray = circumference;
+				});
+
 				counters.forEach(counter => {
 					const target = +counter.getAttribute('data-target');
-					const count = +counter.innerText;
+					let current = 0;
 					const increment = target / 50;
 					
 					const updateCounter = () => {
-						const current = +counter.innerText;
 						if (current < target) {
-							counter.innerText = Math.ceil(current + increment);
+							current += increment;
+							counter.innerText = Math.ceil(current);
 							setTimeout(updateCounter, 20);
 						} else {
 							counter.innerText = target;
@@ -73,9 +114,13 @@ const { id, data } = Astro.props;
 					};
 					updateCounter();
 				});
+				observer.unobserve(entry.target);
 			}
 		});
-	}, { threshold: 0.5 });
+	}, { threshold: 0.2 });
 
-	document.querySelectorAll('section').forEach(section => observer.observe(section));
+	document.querySelectorAll('section').forEach(section => {
+		if (section.querySelector('.counter')) observer.observe(section);
+	});
 </script>
+
