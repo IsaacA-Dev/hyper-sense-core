@@ -1,28 +1,45 @@
 @import "tailwindcss";
 
 @theme {
-    /* --- PALETA BASE: HYPER-SENSE CORE --- */
+    /* --- SYNC WITH SHOWCASE JSON --- */
+    --color-primary: var(--brand-primary);
+    --color-secondary: var(--brand-secondary);
+    --color-accent: var(--brand-accent);
+    --color-surface: var(--brand-surface);
+    --color-bg: var(--brand-background);
+    --color-txt: var(--brand-text);
+    
+    --font-display: var(--font-display);
+    --font-body: var(--font-body);
+}
 
-    /* Color de Acción (Inspirado en el rojo de Daredevil/Spidey) */
-    --color-action-primary: #D00000;
-    /* Rojo vibrante pero profesional */
-    --color-action-secondary: #1E293B;
-    /* Azul pizarra muy oscuro (Casi negro) */
-    --color-action-accent: #FFD700;
-    /* Amarillo rayo (Flash) para detalles mínimos */
+@layer base {
+    :root {
+        color-scheme: dark;
+    }
 
-    /* Colores de Superficie (Limpieza y Profundidad) */
-    --color-surface-900: #0F172A;
-    /* Fondo profundo (Modo Noche) */
-    --color-surface-800: #1E293B;
-    /* Tarjetas y secciones */
-    --color-surface-100: #F8FAFC;
-    /* Texto principal en modo oscuro o fondo en modo claro */
+    body {
+        @apply bg-bg text-txt antialiased selection:bg-primary/30;
+    }
 
-    /* Colores de Estado */
-    --color-status-success: #10B981;
-    --color-status-error: #EF4444;
+    /* Custom tactical scrollbar */
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+        @apply bg-bg;
+    }
+    ::-webkit-scrollbar-thumb {
+        @apply bg-white/5 border-2 border-transparent bg-clip-padding rounded-full hover:bg-primary/40;
+    }
+}
 
-    /* Tipografía Escala */
-    --font-display: "Inter", system-ui, sans-serif;
+@layer components {
+    .glass {
+        @apply bg-white/[0.02] backdrop-blur-xl border border-white/[0.05] shadow-2xl;
+    }
+    
+    .tactical-border {
+        @apply border border-white/[0.05] hover:border-primary/30 transition-colors duration-500;
+    }
 }

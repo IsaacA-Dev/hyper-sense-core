@@ -1,0 +1,57 @@
+---
+import { resolvePath } from '../../utils/paths';
+import Badge from '../atomics/Badge.astro';
+
+interface Props {
+	id: string;
+	data: {
+		title: string;
+		subtitle: string;
+		content: string;
+		image: string;
+	};
+}
+
+const { id, data } = Astro.props;
+---
+
+<section {id} class="py-40 px-6 relative overflow-hidden">
+	<div class="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+		
+		<div class="relative order-2 lg:order-1">
+			<!-- Stack of images / effects -->
+			<div class="relative z-10 rounded-3xl overflow-hidden aspect-video tactical-border shadow-2xl">
+				<img {src}={resolvePath(data.image)} alt="Identity" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000" />
+			</div>
+			
+			<div class="absolute -top-10 -left-10 w-full h-full bg-primary/2 rounded-3xl -z-10 rotate-3"></div>
+			<div class="absolute inset-0 bg-gradient-to-t from-bg via-transparent to-transparent z-20"></div>
+
+			<!-- Dynamic Badge Overlay -->
+			<div class="absolute -bottom-6 -right-6 glass p-6 rounded-2xl z-30 max-w-[200px] animate-bounce duration-[3000ms]">
+				<p class="text-[10px] font-mono uppercase tracking-widest text-primary mb-1">Status Code</p>
+				<p class="text-lg font-black italic tracking-tighter uppercase leading-none">Security Verified</p>
+			</div>
+		</div>
+
+		<div class="relative z-10 order-1 lg:order-2">
+			<Badge text="Sobre el Sistema" className="mb-6" />
+			<h2 class="text-4xl md:text-6xl font-black italic uppercase tracking-tighter mb-4 leading-[0.9]">
+				{data.title} <br />
+				<span class="text-txt/20">{data.subtitle}</span>
+			</h2>
+			<div class="w-16 h-1 bg-primary mb-12"></div>
+			<p class="text-txt/50 text-lg leading-relaxed font-light mb-10 border-l-2 border-white/5 pl-8 italic">
+				{data.content}
+			</p>
+			
+			<a href="#" class="group flex items-center gap-4 text-xs uppercase tracking-widest font-bold text-primary">
+				Descubrir Visión
+				<span class="w-8 h-[1px] bg-primary group-hover:w-16 transition-all duration-500"></span>
+			</a>
+		</div>
+	</div>
+
+	<!-- Background Abstract Shape -->
+	<div class="absolute top-0 right-0 w-1/2 h-full bg-white/[0.01] skew-x-12 -z-10 translate-x-1/2"></div>
+</section>
