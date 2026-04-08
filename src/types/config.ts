@@ -46,6 +46,7 @@ export type Section =
   | { type: 'tech-carousel'; id: string; data: TechCarouselData };
 
 export interface TechCarouselData {
+
   title?: string;
   technologies: { name: string; icon: string }[];
 }

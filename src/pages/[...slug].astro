@@ -1,0 +1,50 @@
+---
+// Forcing path synchronization...
+import MainLayout from '../layouts/MainLayout.astro';
+
+import { getSiteConfig } from '../utils/config-resolver';
+import FallbackSection from '../components/sections/FallbackSection.astro';
+
+/**
+ * FULLY DYNAMIC COMPONENT DISCOVERY (White Label Core)
+ * Este sistema escanea automáticamente la carpeta de secciones y registra los componentes.
+ * No necesitas importar manualmente cada módulo nuevo.
+ */
+const sectionModules = import.meta.glob('../components/sections/*.astro', { eager: true });
+
+// Mapeo automático basado en el nombre del archivo (kebab-case)
+const COMPONENT_MAP = Object.entries(sectionModules).reduce((acc, [path, module]) => {
+  const fileName = path.split('/').pop()?.replace('.astro', '');
+  if (fileName) {
+    // Convierte "BentoGrid" a "bento-grid"
+    const key = fileName.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+    acc[key] = (module as any).default;
+  }
+  return acc;
+}, {} as Record<string, any>);
+
+export async function getStaticPaths() {
+  const siteConfig = getSiteConfig();
+  const paths = [
+    { params: { slug: undefined } },
+    ...siteConfig.layout.map(section => ({
+      params: { slug: section.id }
+    }))
+  ];
+  console.log('--- Generating Static Paths ---');
+  paths.forEach(p => console.log(`Path: /${p.params.slug || ''}`));
+  return paths;
+}
+
+
+const { slug } = Astro.params;
+const siteConfig = getSiteConfig();
+---
+
+<MainLayout config={siteConfig} activeSection={slug}>
+	{siteConfig.layout.map((section) => {
+    // Buscamos el componente por su tipo dinámico (ej: 'hero', 'bento-grid')
+    const Component = COMPONENT_MAP[section.type] || FallbackSection;
+    return <Component {...section} />;
+  })}
+</MainLayout>

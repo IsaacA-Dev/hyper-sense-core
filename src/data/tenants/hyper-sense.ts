@@ -67,10 +67,11 @@ export const siteConfig: SiteConfig = {
       data: {
         title: "Impacto en Tiempo Real",
         stats: [
-          { label: "Tiempo de Respuesta", value: "99", suffix: "ms", progress: 99 },
-          { label: "Optimización SEO", value: "100", suffix: "%", progress: 100 },
-          { label: "Reducción de Latencia", value: "45", suffix: "%", progress: 45 }
+          { label: "Tiempo de Respuesta", value: "18", suffix: "ms", progress: 99 },
+          { label: "Rendimiento Core", value: "100", suffix: "%", progress: 100 },
+          { label: "Velocidad de Carga", value: "0.8", suffix: "s", progress: 96 }
         ]
+
       }
     },
     {
@@ -113,3 +114,5 @@ export const siteConfig: SiteConfig = {
     }
   ]
 };
+
+
