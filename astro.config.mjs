@@ -4,11 +4,11 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  // La URL base de tu perfil de GitHub
-  site: 'https://isaaca-dev.github.io',
+  // Tu dominio real ahora
+  site: 'https://isaaca-dev.me',
 
-  // El nombre exacto de la carpeta/repositorio de este nuevo proyecto
-  base: '/hyper-sense-core',
+  // IMPORTANTE: Cambia esto a '/' para que las rutas sean relativas a la raíz
+  base: '/',
 
   vite: {
     plugins: [tailwindcss()]

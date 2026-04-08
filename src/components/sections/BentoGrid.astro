@@ -1,14 +1,14 @@
 ---
+import type { BentoData } from '../../types/config';
+
 interface Props {
 	id: string;
-	data: {
-		title: string;
-		items: { title: string; description: string; size: 'large' | 'small'; icon: string }[];
-	};
+	data: BentoData;
 }
 
 const { id, data } = Astro.props;
 ---
+
 
 <section {id} class="py-20 md:py-32 px-4 md:px-6 container mx-auto overflow-hidden">
 	<div class="mb-12 md:mb-20">

@@ -1,0 +1,44 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import { getSiteConfig } from '../utils/config-resolver';
+
+const siteConfig = getSiteConfig();
+const { brand } = siteConfig;
+---
+
+<MainLayout config={siteConfig} title="404 - Sistema No Encontrado">
+	<section class="min-h-[70vh] flex flex-col items-center justify-center p-6 text-center">
+		<!-- Glitch Effect Container -->
+		<div class="relative mb-12">
+			<h1 class="text-[12rem] md:text-[20rem] font-black italic tracking-tighter leading-none text-txt/5 dark:text-white/5 animate-pulse">404</h1>
+			<div class="absolute inset-0 flex items-center justify-center">
+				<div class="text-4xl md:text-6xl font-black italic uppercase tracking-tighter text-primary drop-shadow-[0_10px_30px_rgba(var(--brand-primary-rgb),0.5)]">
+					ERROR_CODE <br />
+					NOT_FOUND
+				</div>
+			</div>
+		</div>
+
+		<p class="max-w-md text-txt/50 text-sm md:text-lg font-light mb-12 leading-relaxed italic">
+			La coordenada a la que intentas acceder no existe en el núcleo de {brand.name}. 
+			El sistema ha sido reconfigurado para evitar brechas de seguridad.
+		</p>
+
+		<a href="/" class="group flex items-center gap-4 text-[10px] md:text-xs uppercase tracking-widest font-bold text-primary hover:text-brand-accent transition-colors">
+			<span class="w-6 md:w-8 h-[1px] bg-primary group-hover:w-12 transition-all"></span>
+			Volver a la Base
+		</a>
+
+		<!-- Tactical UI elements -->
+		<div class="mt-20 grid grid-cols-2 gap-20 opacity-10">
+			<div class="text-left">
+				<p class="font-mono text-[8px] uppercase tracking-widest">Protocol: HTTP/1.1</p>
+				<p class="font-mono text-[8px] uppercase tracking-widest">Status: 404 UNRESOLVED</p>
+			</div>
+			<div class="text-right">
+				<p class="font-mono text-[8px] uppercase tracking-widest">System: {brand.name}</p>
+				<p class="font-mono text-[8px] uppercase tracking-widest">Latency: 0ms</p>
+			</div>
+		</div>
+	</section>
+</MainLayout>

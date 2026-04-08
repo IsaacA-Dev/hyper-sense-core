@@ -1,0 +1,51 @@
+---
+import type { TechCarouselData } from '../../types/config';
+
+interface Props {
+  id: string;
+  data: TechCarouselData;
+}
+
+const { id, data } = Astro.props;
+---
+
+<section {id} class="py-12 md:py-20 bg-black/[0.02] dark:bg-white/[0.01] overflow-hidden">
+  {data.title && (
+    <div class="container mx-auto px-6 mb-10 text-center">
+      <p class="text-[9px] font-mono uppercase tracking-[0.4em] text-primary mb-2">Engine Stack</p>
+      <h2 class="text-xl md:text-2xl font-black italic tracking-tighter uppercase">{data.title}</h2>
+    </div>
+  )}
+
+  <div class="relative flex overflow-x-hidden">
+    <div class="flex animate-marquee whitespace-nowrap py-8 items-center gap-12 md:gap-24">
+      {[...data.technologies, ...data.technologies, ...data.technologies].map((tech) => (
+        <div class="flex items-center gap-3 opacity-30 hover:opacity-100 transition-opacity duration-500 group cursor-default">
+          <img 
+             src={tech.icon} 
+             alt={tech.name} 
+             class="w-6 h-6 md:w-8 md:h-8 grayscale group-hover:grayscale-0 transition-all"
+             loading="lazy"
+          />
+          <span class="text-sm md:text-lg font-black italic uppercase tracking-tighter text-txt">{tech.name}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-33.33%); }
+  }
+
+  .animate-marquee {
+    animation: marquee 40s linear infinite;
+  }
+
+  /* Pause on hover if desired */
+  .animate-marquee:hover {
+    animation-play-state: paused;
+  }
+</style>

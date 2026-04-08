@@ -2,15 +2,15 @@
 import { ClientRouter } from 'astro:transitions';
 import { resolvePath } from '../utils/paths';
 import '../styles/global.css';
-import type { ShowcaseConfig } from '../data/showcase';
+import type { SiteConfig } from '../types/config';
 
 interface Props {
-	config: ShowcaseConfig;
+	config: SiteConfig;
 	title?: string;
 }
 
 const { config, title } = Astro.props;
-const { theme, brand } = config;
+const { theme, brand, author, socials } = config;
 
 // Inyección de variables base
 const primaryColor = theme.colors.primary;
@@ -25,6 +25,10 @@ const hexToRgb = (hex: string) => {
 };
 
 const primaryRGB = hexToRgb(primaryColor);
+
+// Generar URL de Google Fonts dinámicamente
+const getFontFamily = (fontStr: string) => fontStr.split(',')[0].replace(/['"]/g, '').replace(/\s+/g, '+');
+const googleFontsUrl = `https://fonts.googleapis.com/css2?family=${getFontFamily(theme.fonts.display)}:wght@400;700;900&family=${getFontFamily(theme.fonts.body)}:wght@300;400;600&display=swap`;
 
 const dynamicStyles = `
   :root {
@@ -54,6 +58,7 @@ const dynamicStyles = `
 
 
 
+
 <!doctype html>
 <html lang="es" class="scroll-smooth">
 	<head>
@@ -63,7 +68,13 @@ const dynamicStyles = `
 		<meta name="generator" content={Astro.generator} />
 		<title>{title ? `${title} | ${brand.name}` : `${brand.name} | ${brand.slogan}`}</title>
 		
+		<!-- Dynamic Google Fonts -->
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href={googleFontsUrl} rel="stylesheet">
+		
 		<style is:inline set:html={dynamicStyles} />
+
 		
 		<ClientRouter />
 
@@ -107,7 +118,7 @@ const dynamicStyles = `
 				
 				<div class="flex items-center gap-3 md:gap-8">
 					<div class="hidden lg:flex items-center gap-6">
-						{config.sections.map(section => (
+						{config.layout.map(section => (
 							<a href={`#${section.id}`} class="text-[10px] uppercase tracking-[0.2em] font-medium text-brand-text/50 hover:text-brand-primary transition-colors">
 								{section.type.replace('-', ' ')}
 							</a>
@@ -120,7 +131,7 @@ const dynamicStyles = `
 					</button>
 
 
-					<a href="#" class="bg-brand-primary text-white text-[10px] md:text-[11px] uppercase tracking-widest px-4 md:px-6 py-2 md:py-2.5 rounded-full font-bold hover:scale-105 transition-all shadow-lg shadow-brand-primary/20">
+					<a href={`mailto:${brand.email}`} class="bg-brand-primary text-white text-[10px] md:text-[11px] uppercase tracking-widest px-4 md:px-6 py-2 md:py-2.5 rounded-full font-bold hover:scale-105 transition-all shadow-lg shadow-brand-primary/20">
 						Contact
 					</a>
 				</div>
@@ -140,15 +151,22 @@ const dynamicStyles = `
 							<h3 class="text-2xl font-black italic tracking-tighter uppercase">{brand.name}</h3>
 						</a>
 						<p class="text-txt/50 text-sm max-w-sm mx-auto md:mx-0 leading-relaxed font-light mb-8">
-							Arquitectando el futuro de las interfaces de alto rendimiento con precisión técnica y diseño centrado en datos. Un estándar de excelencia para el desarrollo moderno.
+							{brand.slogan}. Arquitectando el futuro con precisión técnica y diseño centrado en datos.
 						</p>
+						<div class="flex justify-center md:justify-start gap-4">
+							{socials.map(social => (
+								<a href={social.url} target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full glass flex items-center justify-center hover:bg-brand-primary group transition-all capitalize">
+									<span class="text-[10px] font-mono text-txt/40 group-hover:text-white">{social.platform.substring(0, 2)}</span>
+								</a>
+							))}
+						</div>
 					</div>
 
 					<div class="md:col-span-4 grid grid-cols-2 gap-8">
 						<div>
 							<h4 class="text-[10px] uppercase tracking-[0.3em] text-brand-primary font-bold mb-6">Explorar</h4>
 							<ul class="space-y-4 text-xs font-medium text-txt/40">
-								{config.sections.map(section => (
+								{config.layout.map(section => (
 									<li><a href={`#${section.id}`} class="hover:text-brand-primary transition-colors uppercase tracking-widest">{section.type.replace('-', ' ')}</a></li>
 								))}
 							</ul>
@@ -165,9 +183,9 @@ const dynamicStyles = `
 
 					<div class="md:col-span-3 text-center md:text-right border-t md:border-t-0 md:border-l border-white/5 pt-12 md:pt-0 md:pl-12">
 						<p class="text-[9px] font-mono uppercase tracking-widest text-brand-primary mb-3">Engine Master</p>
-						<p class="text-xl font-black italic tracking-tighter uppercase mb-1">Isaac Gonzalez</p>
-						<p class="text-txt/30 text-[10px] uppercase tracking-widest mb-6">Full-Stack Architect & UI Engineer</p>
-						<a href="mailto:isaaca.dev.net@gmail.com" class="text-xs font-bold border-b border-brand-primary/30 pb-1 hover:border-brand-primary transition-all tracking-tight">isaaca.dev.net@gmail.com</a>
+						<p class="text-xl font-black italic tracking-tighter uppercase mb-1">{author.name}</p>
+						<p class="text-txt/30 text-[10px] uppercase tracking-widest mb-6">{author.role}</p>
+						<a href={`mailto:${brand.email}`} class="text-xs font-bold border-b border-brand-primary/30 pb-1 hover:border-brand-primary transition-all tracking-tight">{brand.email}</a>
 					</div>
 
 				</div>

@@ -1,19 +1,16 @@
 ---
 import { resolvePath } from '../../utils/paths';
 import Badge from '../atomics/Badge.astro';
+import type { IdentityData } from '../../types/config';
 
 interface Props {
 	id: string;
-	data: {
-		title: string;
-		subtitle: string;
-		content: string;
-		image: string;
-	};
+	data: IdentityData;
 }
 
 const { id, data } = Astro.props;
 ---
+
 
 <section {id} class="py-20 md:py-40 px-4 md:px-6 relative overflow-hidden">
 	<div class="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">

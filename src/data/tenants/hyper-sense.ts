@@ -1,60 +1,23 @@
-export interface ShowcaseConfig {
-  brand: {
-    name: string;
-    logo: string;
-    slogan: string;
-  };
-  theme: {
-    colors: {
-      primary: string;
-      secondary: string;
-      accent: string;
-      surface: string;
-      background: string;
-      text: string;
-    };
-    fonts: {
-      display: string;
-      body: string;
-    };
-  };
-  sections: Section[];
-}
+import type { SiteConfig } from '../../types/config';
 
-export type Section = 
-  | { type: 'hero'; id: string; data: any }
-  | { type: 'bento-grid'; id: string; data: BentoData }
-  | { type: 'metrics-pulse'; id: string; data: MetricsData }
-  | { type: 'identity-stack'; id: string; data: IdentityData }
-  | { type: 'process-timeline'; id: string; data: TimelineData };
-
-interface BentoData {
-  title: string;
-  items: { title: string; description: string; size: 'large' | 'small'; icon: string }[];
-}
-
-interface MetricsData {
-  title: string;
-  stats: { label: string; value: string; suffix?: string; progress: number }[];
-}
-
-interface IdentityData {
-  title: string;
-  subtitle: string;
-  content: string;
-  image: string;
-}
-
-interface TimelineData {
-  title: string;
-  steps: { title: string; date: string; description: string }[];
-}
-
-export const showcaseData: ShowcaseConfig = {
+export const siteConfig: SiteConfig = {
   brand: {
     name: "HYPER-SENSE-CORE",
     logo: "/logo.svg",
-    slogan: "High-Precision Interface Showcase"
+    slogan: "High-Precision Interface Showcase",
+    email: "isaaca.dev.net@gmail.com"
+  },
+  assets: {
+    cloudinary: {
+      cloudName: "hyper-sense-cloud",
+      folder: "showcase"
+    },
+    fallbackImage: "/images/fallback.png"
+  },
+  author: {
+
+    name: "Isaac Gonzalez",
+    role: "Full-Stack Architect & UI Engineer"
   },
   theme: {
     colors: {
@@ -70,14 +33,19 @@ export const showcaseData: ShowcaseConfig = {
       body: "'Outfit', sans-serif"
     }
   },
-  sections: [
+  socials: [
+    { platform: 'github', url: 'https://github.com/IsaacA-Dev' },
+  ],
+  layout: [
     {
       type: 'hero',
+
       id: 'main-hero',
       data: {
         title: "HYPER",
         highlight: "SHOWCASE",
         description: "Explora la convergencia entre diseño táctico y rendimiento extremo. Una plataforma construida para visualizar el futuro de las interfaces empresariales.",
+        cta: { text: "Explorar Sistema", url: "#", secondaryText: "Especificaciones", secondaryUrl: "#" }
       }
     },
     {
@@ -116,13 +84,29 @@ export const showcaseData: ShowcaseConfig = {
       }
     },
     {
+      type: 'tech-carousel',
+      id: 'stack-carousel',
+      data: {
+        title: "Tecnologías de Alto Rendimiento",
+        technologies: [
+          { name: "Astro", icon: "https://cdn.simpleicons.org/astro/E11D48" },
+          { name: "TypeScript", icon: "https://cdn.simpleicons.org/typescript/3178C6" },
+          { name: "Tailwind CSS", icon: "https://cdn.simpleicons.org/tailwindcss/06B6D4" },
+          { name: "Dokploy", icon: "https://dokploy.com/favicon.ico" },
+          { name: "Cloudflare", icon: "https://cdn.simpleicons.org/cloudflare/F38020" },
+          { name: "Github", icon: "https://cdn.simpleicons.org/github" }
+        ]
+      }
+    },
+    {
       type: 'process-timeline',
+
       id: 'implementation-flow',
       data: {
         title: "Flujo de Ejecución",
         steps: [
           { date: "Fase 01", title: "Análisis Táctico", description: "Auditamos los requerimientos y definimos la estrategia de visualización." },
-          { date: "Fase 02", title: "Arquitectura de Datos", description: "Modelamos el showcase.ts para reflejar la identidad de marca." },
+          { date: "Fase 02", title: "Arquitectura de Datos", description: "Modelamos el site-config.ts para reflejar la identidad de marca." },
           { date: "Fase 03", title: "Despliegue Core", description: "Implementación de los módulos atómicos con optimización de assets." }
         ]
       }

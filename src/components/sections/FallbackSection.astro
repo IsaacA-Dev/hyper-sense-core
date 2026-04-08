@@ -1,0 +1,17 @@
+---
+interface Props {
+  type: string;
+}
+
+const { type } = Astro.props;
+const isDev = import.meta.env.DEV;
+---
+
+{isDev && (
+  <div class="p-6 border-2 border-dashed border-red-500/30 rounded-xl bg-red-500/5 my-4">
+    <p class="text-[10px] font-mono uppercase tracking-widest text-red-500 mb-2">Warning: Missing Module</p>
+    <p class="text-sm font-light text-txt/60 italic">
+      The component type <span class="font-bold text-red-400">"{type}"</span> has not been mapped in the component orchestrator.
+    </p>
+  </div>
+)}
