@@ -9,6 +9,9 @@ export default defineConfig({
 
   // IMPORTANTE: Cambia esto a '/' para que las rutas sean relativas a la raíz
   base: '/',
+  build: {
+    format: 'directory'
+  },
 
   vite: {
     plugins: [tailwindcss()]
