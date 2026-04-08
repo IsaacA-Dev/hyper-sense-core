@@ -45,7 +45,7 @@ export const siteConfig: SiteConfig = {
         title: "HYPER",
         highlight: "SHOWCASE",
         description: "Explora la convergencia entre diseño táctico y rendimiento extremo. Una plataforma construida para visualizar el futuro de las interfaces empresariales.",
-        cta: { text: "Explorar Sistema", url: "#", secondaryText: "Especificaciones", secondaryUrl: "#" }
+        cta: { text: "Explorar Sistema", url: "/features-bento", secondaryText: "Especificaciones", secondaryUrl: "/implementation-flow" }
       }
     },
     {

@@ -44,8 +44,9 @@ export const siteConfig: SiteConfig = {
         title: "NEBULA",
         highlight: "PULSE",
         description: "La próxima frontera de la visualización de datos espaciales. Diseñado para arquitectos del mañana.",
-        cta: { text: "Iniciar Despegue", url: "#", secondaryText: "Protocolos", secondaryUrl: "#" }
+        cta: { text: "Iniciar Despegue", url: "/vision-nebula", secondaryText: "Protocolos", secondaryUrl: "/nebula-timeline" }
       }
+
     },
     {
       type: 'identity-stack',
