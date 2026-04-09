@@ -1,0 +1,117 @@
+---
+import type { ContactData } from '../../types/config';
+
+interface Props {
+	id: string;
+	data: ContactData;
+}
+
+const { id, data } = Astro.props;
+---
+
+<section {id} class="relative overflow-hidden reveal-item">
+	<!-- Background Elements -->
+	<div class="absolute top-0 right-0 w-1/3 h-full bg-primary/5 blur-[120px] -z-10 atmospheric-visible"></div>
+	
+	<div class="container mx-auto px-4 md:px-6">
+		<div class="grid grid-cols-1 lg:grid-cols-2 gap-16 md:gap-32 items-center">
+			
+			<!-- Left Column: Info -->
+			<div class="reveal-item">
+				<p class="text-[9px] md:text-[10px] font-mono uppercase tracking-[0.5em] text-primary mb-6">
+					<span class="pulse-node inline-block w-2 h-2 rounded-full bg-primary mr-2"></span>
+					Core Connectivity
+				</p>
+				<h2 class="section-title text-4xl md:text-8xl font-black uppercase tracking-tighter mb-8 md:mb-12 leading-none">
+					{data.title}
+				</h2>
+				<p class="text-txt/60 text-lg md:text-2xl font-light mb-12 md:mb-20 max-w-xl leading-relaxed">
+					{data.description}
+				</p>
+
+				<div class="space-y-8 md:space-y-12">
+					<div class="group flex items-start gap-6">
+						<div class="w-12 h-12 md:w-16 md:h-16 glass flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+							<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+						</div>
+						<div>
+							<p class="text-[10px] uppercase tracking-widest text-txt/40 mb-1">Email Matrix</p>
+							<a href={`mailto:${data.info.email}`} class="text-xl md:text-2xl font-bold hover:text-primary transition-colors">{data.info.email}</a>
+						</div>
+					</div>
+
+					<div class="group flex items-start gap-6">
+						<div class="w-12 h-12 md:w-16 md:h-16 glass flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+							<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+						</div>
+						<div>
+							<p class="text-[10px] uppercase tracking-widest text-txt/40 mb-1">Direct Line</p>
+							<a href={`tel:${data.info.phone}`} class="text-xl md:text-2xl font-bold hover:text-primary transition-colors">{data.info.phone}</a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Right Column: Form -->
+			<div class="reveal-item" style="transition-delay: 300ms">
+				<div class="glass p-8 md:p-16 relative">
+					<form class="space-y-8 md:space-y-12">
+						<div class="space-y-4">
+							<label class="text-[10px] md:text-xs uppercase tracking-[0.3em] font-bold text-primary">Full Name</label>
+							<input 
+								type="text" 
+								placeholder="IDENTIFY YOURSELF" 
+								class="w-full bg-white/5 border-b border-white/10 p-4 focus:border-primary transition-all outline-none font-mono text-sm md:text-base placeholder:text-txt/20"
+							/>
+						</div>
+
+						<div class="space-y-4">
+							<label class="text-[10px] md:text-xs uppercase tracking-[0.3em] font-bold text-primary">Email Access</label>
+							<input 
+								type="email" 
+								placeholder="CONTACT@SYSTEM.COM" 
+								class="w-full bg-white/5 border-b border-white/10 p-4 focus:border-primary transition-all outline-none font-mono text-sm md:text-base placeholder:text-txt/20"
+							/>
+						</div>
+
+						<div class="space-y-4">
+							<label class="text-[10px] md:text-xs uppercase tracking-[0.3em] font-bold text-primary">Message Payload</label>
+							<textarea 
+								rows="4" 
+								placeholder="INITIATE DATA TRANSFER..." 
+								class="w-full bg-white/5 border-b border-white/10 p-4 focus:border-primary transition-all outline-none font-mono text-sm md:text-base placeholder:text-txt/20 resize-none"
+							></textarea>
+						</div>
+
+						<button type="submit" class="w-full bg-primary text-white py-6 md:py-8 font-black uppercase tracking-[0.4em] text-xs md:text-sm hover:scale-[1.02] transition-all shadow-2xl shadow-primary/20">
+							Initialize Transmission
+						</button>
+					</form>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</section>
+
+<style>
+	/* Specific Mutation for minimal mode inputs */
+	:global(.minimal) input, 
+	:global(.minimal) textarea {
+		background: transparent !important;
+		border-bottom-width: 2px !important;
+		border-color: rgba(var(--brand-primary-rgb), 0.1) !important;
+		font-family: inherit !important;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+	}
+
+	:global(.minimal) input:focus, 
+	:global(.minimal) textarea:focus {
+		border-color: var(--brand-primary) !important;
+	}
+
+	:global(.atmospheric) .glass {
+		border-radius: 3rem !important;
+	}
+</style>

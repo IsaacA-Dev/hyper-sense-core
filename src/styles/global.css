@@ -11,11 +11,45 @@
     
     --font-display: var(--font-display);
     --font-body: var(--font-body);
+
+    /* --- STYLE TOKENS --- */
+    --style-radius-card: var(--radius-card);
+    --style-radius-btn: var(--radius-btn);
+    --style-title-font: var(--title-font-style);
+    --style-title-case: var(--title-text-case);
+    --style-glow-opacity: var(--glow-opacity);
+    --style-grid-opacity: var(--grid-opacity);
 }
 
 @layer base {
+    /* --- VISIBILITY HELPERS BY VARIANT --- */
+    .tactical-visible, .minimal-visible, .atmospheric-visible { 
+        display: none !important; 
+    }
+    
+    html.tactical .tactical-visible { display: block !important; }
+    html.minimal .minimal-visible { display: block !important; }
+    html.atmospheric .atmospheric-visible { display: block !important; }
+
+    html.tactical .tactical-visible.inline { display: inline-block !important; }
+    html.minimal .minimal-visible.inline { display: inline-block !important; }
+    html.atmospheric .atmospheric-visible.inline { display: inline-block !important; }
+
+    /* --- GLOBAL STYLE TOKENS (DEFAULT/TACTICAL) --- */
     :root {
         color-scheme: dark;
+        --radius-card: 2rem;
+        --radius-btn: 9999px;
+        --title-font-style: italic;
+        --title-text-case: uppercase;
+        --title-letter-spacing: -0.05em;
+        --glow-opacity: 1;
+        --grid-opacity: 0.05;
+        --noise-opacity: 0;
+        --glass-blur: 24px;
+        --glass-bg: var(--white-5);
+        --glass-border: var(--white-10);
+        --section-padding: 8rem;
     }
 
     /* Light Theme Variables */
@@ -24,9 +58,8 @@
         --brand-background: #F8FAFC;
         --brand-text: #0F172A;
         --brand-surface: #FFFFFF;
-        --brand-primary: #E11D48; /* Redefine if needed for contrast */
+        --brand-primary: #E11D48;
         --brand-secondary: #F1F5F9;
-        /* Subtle adjustments for light mode */
         --white-10: rgba(0, 0, 0, 0.05);
         --white-5: rgba(0, 0, 0, 0.03);
     }
@@ -36,14 +69,72 @@
         --white-5: rgba(255, 255, 255, 0.05);
     }
 
+    /* --- VARIANT 2: NEO-MINIMALIST (PROFESSIONAL & EDITORIAL) --- */
+    .minimal {
+        --radius-card: 0px;
+        --radius-btn: 2px;
+        --title-font-style: normal;
+        --title-text-case: uppercase;
+        --title-letter-spacing: -0.1em;
+        --title-weight: 900;
+        --glow-opacity: 0;
+        --grid-opacity: 0;
+        --noise-opacity: 0.04;
+        --glass-blur: 0px;
+        --glass-bg: var(--brand-surface);
+        --glass-border: rgba(0, 0, 0, 0.05);
+        --section-padding: 16rem;
+        --font-display: 'Inter', sans-serif;
+    }
+
+    /* --- VARIANT 3: ATMOSPHERIC (EXPERIMENTAL & WOW) --- */
+    .atmospheric {
+        --radius-card: 4rem;
+        --radius-btn: 9999px;
+        --title-font-style: italic;
+        --title-text-case: none;
+        --title-letter-spacing: -0.02em;
+        --title-weight: 400;
+        --glow-opacity: 0.8;
+        --grid-opacity: 0.02;
+        --noise-opacity: 0.08;
+        --glass-blur: 60px;
+        --glass-bg: rgba(255,255,255,0.03);
+        --glass-border: rgba(255,255,255,0.05);
+        --section-padding: 12rem;
+    }
+
+    /* Transition for all tokens */
+    :root {
+        transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
     html {
-        transition: background-color 0.4s ease, color 0.4s ease;
+        transition: background-color 0s; /* Instant bg swap to avoid flicker, let tokens handle content */
     }
 
     body {
         @apply bg-bg text-txt antialiased selection:bg-primary/30;
         -webkit-text-size-adjust: 100%;
         text-size-adjust: 100%;
+        position: relative;
+    }
+
+    body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image: url('/noise.png');
+        opacity: var(--noise-opacity);
+        pointer-events: none;
+        z-index: 100;
+        transition: opacity 0.6s ease;
+    }
+
+    section {
+        padding-top: var(--section-padding);
+        padding-bottom: var(--section-padding);
+        transition: padding 0.8s ease;
     }
 
     /* Custom tactical scrollbar */
@@ -56,26 +147,109 @@
     ::-webkit-scrollbar-thumb {
         @apply bg-primary/20 rounded-full hover:bg-primary/40 transition-colors;
     }
+
+    /* Map tokens to helper classes */
+    .glow-effect { opacity: var(--glow-opacity); transition: opacity 0.6s ease; }
+    .grid-background { opacity: var(--grid-opacity); transition: opacity 0.6s ease; }
+    
+    .section-title, .item-title, .hero-title {
+        font-style: var(--title-font-style);
+        text-transform: var(--title-text-case);
+        letter-spacing: var(--title-letter-spacing);
+        font-weight: var(--title-weight);
+    }
 }
 
 @layer components {
+    /* --- GLASSMORPISM IDENTITY --- */
     .glass {
-        @apply backdrop-blur-xl border shadow-2xl transition-all duration-300;
+        @apply transition-all duration-700;
+    }
+
+    /* Tactical: Tech/Glow Glass */
+    .tactical .glass {
+        @apply backdrop-blur-xl border-white/10 shadow-2xl;
         background: var(--white-5);
+        border-radius: var(--style-radius-card);
+    }
+    .tactical .glass:hover {
+        @apply border-primary/40 shadow-primary/20;
+    }
+
+    /* Minimal: Flat/Solid Professional */
+    .minimal .glass {
+        @apply backdrop-blur-none border-black/10 dark:border-white/10 shadow-none;
+        background: var(--brand-surface);
+        border-radius: 0;
+        box-shadow: 0 0 0 1px rgba(0,0,0,0.05);
+    }
+    .minimal .glass:hover {
+        @apply translate-y-[-4px] shadow-2xl shadow-black/5;
+        border-color: var(--brand-primary);
+    }
+
+    /* Atmospheric: Liquid/Fuzzy Glass */
+    .atmospheric .glass {
+        @apply backdrop-blur-[40px] border-white/5 shadow-none;
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 4rem;
+    }
+    .atmospheric .glass:hover {
+        @apply scale-[1.02] rotate-1;
+        background: rgba(255, 255, 255, 0.04);
+    }
+
+    /* --- BORDER IDENTITY --- */
+    .tactical-border {
+        @apply border transition-all duration-500;
         border-color: var(--white-10);
+        border-radius: var(--style-radius-card);
+    }
+
+    /* --- BUTTON IDENTITY --- */
+    button, .btn, a[class*="bg-primary"] {
+        @apply transition-all duration-500 active:scale-95;
+        border-radius: var(--style-radius-btn);
     }
     
-    .tactical-border {
-        @apply border transition-colors duration-500;
-        border-color: var(--white-10);
+    .minimal button, .minimal .btn, .minimal a[class*="bg-primary"] {
+        @apply hover:tracking-[0.3em] font-black;
+        font-weight: 900 !important;
     }
 
-    .tactical-border:hover {
-        @apply border-primary/30;
+    .atmospheric button, .atmospheric .btn, .atmospheric a[class*="bg-primary"] {
+        @apply blur-none hover:blur-[2px] transition-all;
     }
 
-    /* Optimized for light/dark */
-    .text-muted {
-        @apply opacity-40;
+    /* --- ANIMATION IDENTITY --- */
+    .reveal-item {
+        @apply transition-all duration-1000;
     }
+    
+    .minimal .reveal-item {
+        @apply translate-y-10 opacity-0;
+    }
+    .minimal.loaded .reveal-item {
+        @apply translate-y-0 opacity-100;
+    }
+
+    /* Tactical Pulse (Global) */
+    .tactical .pulse-node {
+        @apply animate-pulse;
+    }
+    .minimal .pulse-node {
+        @apply animate-none;
+    }
+}
+
+/* Specific Section Keyframes */
+@keyframes atmospheric-drift {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    33% { transform: translate(2%, 4%) rotate(2deg); }
+    66% { transform: translate(-1%, -2%) rotate(-1deg); }
+    100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+.atmospheric .glow-effect {
+    animation: atmospheric-drift 20s infinite ease-in-out;
 }

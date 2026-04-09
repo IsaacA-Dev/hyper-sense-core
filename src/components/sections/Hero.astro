@@ -13,34 +13,39 @@ const { id, data } = Astro.props;
 
 
 <section {id} class="relative min-h-[90vh] md:min-h-screen flex flex-col items-center justify-center p-4 md:p-6 text-center overflow-hidden">
-	<!-- Background Glow -->
-	<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl h-64 md:h-96 bg-primary/20 dark:bg-primary/10 blur-[100px] md:blur-[150px] rounded-full -z-10 animate-pulse"></div>
-	<div class="absolute top-1/4 left-1/4 w-32 h-32 bg-accent/20 blur-[80px] rounded-full -z-10 animate-blob"></div>
-	<div class="absolute bottom-1/4 right-1/4 w-32 h-32 bg-primary/20 blur-[80px] rounded-full -z-10 animate-blob animation-delay-2000"></div>
+	<!-- Background Glow (Tactical/Atmospheric) -->
+	<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl h-64 md:h-96 bg-primary/20 dark:bg-primary/10 blur-[100px] md:blur-[150px] rounded-full -z-10 animate-pulse glow-effect"></div>
+	<div class="absolute top-1/4 left-1/4 w-32 h-32 bg-accent/20 blur-[80px] rounded-full -z-10 animate-blob glow-effect"></div>
 
-	<Badge text="Core Showcase Active" className="mb-8 md:mb-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 border-primary/30" />
+	<div class="reveal-item">
+		<Badge text="System Core v2.0" className="mb-8 md:mb-12 border-primary/30" />
+	</div>
 
-	<h1 class="text-5xl md:text-[10rem] font-black tracking-tighter mb-6 md:mb-8 italic leading-[0.9] md:leading-[0.85] uppercase">
-		<span class="text-txt dark:text-txt">{data.title}</span> <br />
-		<span class="text-transparent bg-clip-text bg-gradient-to-br from-primary to-accent drop-shadow-[0_10px_30px_rgba(var(--brand-primary-rgb),0.3)] inline-block px-4">
+	<h1 class="hero-title text-6xl md:text-[14rem] font-black tracking-tighter mb-6 md:mb-10 leading-[0.8] uppercase flex flex-col items-center">
+		<span class="text-txt dark:text-txt reveal-item" style="transition-delay: 200ms">{data.title}</span>
+		<span class="text-transparent bg-clip-text bg-gradient-to-br from-primary to-accent drop-shadow-[0_20px_50px_rgba(var(--brand-primary-rgb),0.4)] inline-block px-4 reveal-item tactical-visible atmospheric-visible" style="transition-delay: 400ms">
+			{data.highlight}
+		</span>
+		<!-- Minimalist Highlight Override (Different styling) -->
+		<span class="minimal-visible text-primary reveal-item font-light italic" style="transition-delay: 400ms; letter-spacing: 0.1em;">
 			{data.highlight}
 		</span>
 	</h1>
 	
-	<p class="max-w-xl text-txt/60 dark:text-txt/50 text-sm md:text-xl font-light mb-10 md:mb-12 leading-relaxed tracking-wide px-4 md:px-0">
-		<span class="text-primary/80 font-medium">//</span> {data.description}
+	<p class="max-w-2xl text-txt/60 dark:text-txt/50 text-base md:text-2xl font-light mb-12 md:mb-16 leading-relaxed tracking-wide px-4 md:px-0 reveal-item" style="transition-delay: 600ms">
+		<span class="text-primary/80 font-bold tactical-visible">//</span> {data.description}
 	</p>
 
 
 
-	<div class="flex flex-col sm:flex-row gap-4 md:gap-6 w-full sm:w-auto px-6 sm:px-0">
+	<div class="flex flex-col sm:flex-row gap-6 md:gap-8 w-full sm:w-auto px-6 sm:px-0 reveal-item" style="transition-delay: 800ms">
 		{data.cta && (
-			<a href={data.cta.url} class="bg-primary text-white text-[10px] md:text-xs uppercase tracking-[0.2em] px-8 md:px-12 py-4 md:py-5 rounded-sm font-bold hover:scale-105 transition-all shadow-2xl shadow-primary/20 text-center">
+			<a href={data.cta.url} class="bg-primary text-white text-[10px] md:text-sm uppercase tracking-[0.3em] px-10 md:px-16 py-4 md:py-6 font-black hover:scale-105 transition-all shadow-2xl shadow-primary/30 text-center">
 				{data.cta.text}
 			</a>
 		)}
 		{data.cta?.secondaryText && (
-			<a href={data.cta.secondaryUrl} class="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/5 text-[10px] md:text-xs uppercase tracking-[0.2em] px-8 md:px-12 py-4 md:py-5 rounded-sm font-bold hover:bg-black/10 dark:hover:bg-white/10 transition-all text-center">
+			<a href={data.cta.secondaryUrl} class="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-[10px] md:text-sm uppercase tracking-[0.3em] px-10 md:px-16 py-4 md:py-6 font-black hover:bg-black/10 dark:hover:bg-white/10 transition-all text-center">
 				{data.cta.secondaryText}
 			</a>
 		)}

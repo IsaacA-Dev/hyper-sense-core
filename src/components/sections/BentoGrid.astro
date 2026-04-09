@@ -11,32 +11,41 @@ const { id, data } = Astro.props;
 
 
 <section {id} class="py-20 md:py-32 px-4 md:px-6 container mx-auto overflow-hidden">
-	<div class="mb-12 md:mb-20">
-		<h2 class="text-4xl md:text-6xl font-black italic uppercase tracking-tighter mb-4">
+	<div class="mb-12 md:mb-20 reveal-item">
+		<h2 class="section-title text-4xl md:text-6xl font-black uppercase tracking-tighter mb-4">
 			{data.title}
 		</h2>
 		<div class="w-16 md:w-24 h-[1px] md:h-[2px] bg-primary"></div>
 	</div>
 
-	<div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+	<div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
 		{data.items.map((item, index) => (
 			<div class={`
-				group relative overflow-hidden rounded-2xl md:rounded-3xl tactical-border glass p-6 md:p-10 flex flex-col justify-end min-h-[220px] md:min-h-[300px]
+				group relative overflow-hidden glass p-8 md:p-12 flex flex-col justify-end min-h-[280px] md:min-h-[380px] reveal-item
 				${item.size === 'large' ? 'md:col-span-2' : 'md:col-span-1'}
-			`}>
-				<!-- Icon / Meta -->
-				<div class="absolute top-6 md:top-10 right-6 md:right-10 opacity-10 group-hover:opacity-100 group-hover:text-primary transition-all duration-500 scale-125 md:scale-150">
-					<span class="text-3xl md:text-4xl">#</span>
+			`} style={{ transitionDelay: `${index * 100}ms` }}>
+				
+				<!-- Tactical Icon -->
+				<div class="absolute top-6 md:top-10 right-6 md:right-10 opacity-10 group-hover:opacity-100 group-hover:text-primary transition-all duration-300 tactical-reveal tactical-visible">
+					<span class="text-3xl md:text-4xl text-primary font-mono font-bold">0{index + 1}</span>
 				</div>
 
-				<div class="relative z-10 transition-transform duration-500 group-hover:-translate-y-2">
-					<p class="text-[9px] md:text-[10px] font-mono uppercase tracking-[0.3em] text-primary mb-3 md:mb-4">Módulo {index + 1}</p>
-					<h3 class="text-xl md:text-3xl font-bold mb-3 md:mb-4 italic uppercase leading-none">{item.title}</h3>
-					<p class="text-txt/50 text-xs md:text-sm leading-relaxed max-w-sm">{item.description}</p>
+				<!-- Structural Content -->
+				<div class="relative z-10 transition-transform duration-700 group-hover:-translate-y-4 reveal-item">
+					<p class="text-[9px] md:text-[10px] font-mono uppercase tracking-[0.4em] text-primary mb-3 md:mb-6">
+						<span class="pulse-node inline-block w-2 h-2 rounded-full bg-primary mr-2"></span>
+						Module {index + 1}
+					</p>
+					<h3 class="item-title text-2xl md:text-4xl font-bold mb-4 md:mb-6 uppercase leading-tight tracking-tighter">
+						{item.title}
+					</h3>
+					<p class="text-txt/60 text-sm md:text-base leading-relaxed max-w-sm font-light">
+						{item.description}
+					</p>
 				</div>
 
 				<!-- Subtle hover gradient -->
-				<div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+				<div class="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
 			</div>
 		))}
 	</div>

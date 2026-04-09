@@ -79,7 +79,7 @@ const dynamicStyles = `
 		<ClientRouter />
 
 		<script is:inline>
-			function applyTheme() {
+			window.applyTheme = function applyTheme() {
 				const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
 				if (theme === 'light') {
 					document.documentElement.classList.add('light');
@@ -87,33 +87,76 @@ const dynamicStyles = `
 					document.documentElement.classList.remove('light');
 				}
 			}
-		
-			applyTheme();
-			document.addEventListener('astro:after-swap', applyTheme);
 
-			window.__initThemeListener = () => {
+			window.applyVariant = function applyVariant() {
+				const variant = localStorage.getItem('style-variant') || 'tactical';
+				document.documentElement.classList.remove('tactical', 'minimal', 'atmospheric', 'loaded');
+				document.documentElement.classList.add(variant);
+				
+				// Staggered reveal trigger
+				setTimeout(() => {
+					document.documentElement.classList.add('loaded');
+				}, 100);
+			}
+		
+			window.applyTheme();
+			window.applyVariant();
+			document.addEventListener('astro:after-swap', () => {
+				window.applyTheme();
+				window.applyVariant();
+			});
+
+			window.__initThemeAndStyleListener = () => {
 				if (window.__themeRegistered) return;
 				document.addEventListener('click', (e) => {
-					const btn = e.target.closest('#theme-toggle');
-					if (btn) {
+					// Theme Toggle
+					const themeBtn = e.target.closest('#theme-toggle');
+					if (themeBtn) {
 						document.documentElement.classList.toggle('light');
 						const isLight = document.documentElement.classList.contains('light');
 						localStorage.setItem('theme', isLight ? 'light' : 'dark');
 					}
+
+					// Contact Modal Toggle
+					const contactBtn = e.target.closest('#contact-btn');
+					const modal = document.getElementById('contact-modal');
+					if (contactBtn && modal) {
+						modal.classList.add('opacity-100', 'pointer-events-auto', 'scale-100');
+						modal.classList.remove('opacity-0', 'pointer-events-none', 'scale-95');
+					}
+
+					const closeModal = e.target.closest('#close-modal');
+					const overlay = e.target.closest('#modal-overlay');
+					if ((closeModal || overlay) && modal) {
+						modal.classList.remove('opacity-100', 'pointer-events-auto', 'scale-100');
+						modal.classList.add('opacity-0', 'pointer-events-none', 'scale-95');
+					}
+
+					// Style Variant Toggle (Cycle 3 styles)
+					const variantBtn = e.target.closest('#variant-toggle');
+					if (variantBtn) {
+						const variants = ['tactical', 'minimal', 'atmospheric'];
+						const current = localStorage.getItem('style-variant') || 'tactical';
+						const next = variants[(variants.indexOf(current) + 1) % variants.length];
+						
+						document.documentElement.classList.remove(...variants);
+						document.documentElement.classList.add(next);
+						localStorage.setItem('style-variant', next);
+					}
 				});
 				window.__themeRegistered = true;
 			};
-			window.__initThemeListener();
+			window.__initThemeAndStyleListener();
 		</script>
 	</head>
 	<body class="bg-brand-background text-brand-text font-body selection:bg-brand-primary/30 antialiased overflow-x-hidden transition-colors duration-500">
 		<!-- Global Glow Effects -->
 		<div class="fixed top-0 left-0 w-full h-full pointer-events-none -z-10 overflow-hidden">
-			<div class="absolute top-[-10%] right-[-10%] w-[70%] h-[70%] bg-brand-primary/10 dark:bg-brand-primary/15 blur-[120px] md:blur-[180px] rounded-full animate-pulse transition-opacity duration-1000"></div>
-			<div class="absolute bottom-[-10%] left-[-10%] w-[60%] h-[60%] bg-brand-accent/10 dark:bg-brand-accent/15 blur-[120px] md:blur-[180px] rounded-full animate-pulse transition-opacity duration-1000" style="animation-delay: 2s"></div>
+			<div class="absolute top-[-10%] right-[-10%] w-[70%] h-[70%] bg-brand-primary/10 dark:bg-brand-primary/15 blur-[120px] md:blur-[180px] rounded-full animate-pulse transition-opacity duration-1000 glow-effect"></div>
+			<div class="absolute bottom-[-10%] left-[-10%] w-[60%] h-[60%] bg-brand-accent/10 dark:bg-brand-accent/15 blur-[120px] md:blur-[180px] rounded-full animate-pulse transition-opacity duration-1000 glow-effect" style="animation-delay: 2s"></div>
 			
 			<!-- Additional tactical lines for dark mode -->
-			<div class="absolute inset-0 bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] opacity-[0.03] dark:opacity-[0.05]" style={`background-image: url(${resolvePath('/grid.svg')})`}></div>
+			<div class="absolute inset-0 bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] opacity-[0.03] dark:opacity-[0.05] grid-background" style={`background-image: url(${resolvePath('/grid.svg')})`}></div>
 		</div>
 
 
@@ -134,28 +177,90 @@ const dynamicStyles = `
 						))}
 					</div>
 					
-					<button id="theme-toggle" transition:persist class="relative p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-all border border-transparent hover:border-black/10 dark:hover:border-white/10 w-10 h-10 flex items-center justify-center overflow-hidden" aria-label="Toggle Theme">
-						<!-- Sun Icon -->
-						<svg id="sun-icon" class="w-5 h-5 absolute transition-all duration-500 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-							<circle cx="12" cy="12" r="4"></circle>
-							<path d="M12 2v2"></path><path d="M12 20v2"></path>
-							<path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path>
-							<path d="M2 12h2"></path><path d="M22 12h2"></path>
-							<path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path>
-						</svg>
-						<!-- Moon Icon -->
-						<svg id="moon-icon" class="w-5 h-5 absolute transition-all duration-500 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-							<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
-						</svg>
-					</button>
+					<div class="flex items-center gap-1 bg-black/5 dark:bg-white/5 p-1 rounded-xl border border-black/10 dark:border-white/10">
+						<button id="variant-toggle" title="Cycle Style Variant" class="p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-all w-10 h-10 flex items-center justify-center group relative overflow-hidden" aria-label="Toggle Style">
+							<!-- Tactical Icon -->
+							<svg id="tactical-icon" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+								<rect width="7" height="7" x="3" y="3" rx="1"></rect>
+								<rect width="7" height="7" x="14" y="3" rx="1"></rect>
+								<rect width="7" height="7" x="14" y="14" rx="1"></rect>
+								<rect width="7" height="7" x="3" y="14" rx="1"></rect>
+							</svg>
+							<!-- Minimal Icon -->
+							<svg id="minimal-icon" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+								<rect width="18" height="18" x="3" y="3" rx="2"></rect>
+								<path d="M3 9h18"></path>
+							</svg>
+							<!-- Atmospheric Icon -->
+							<svg id="atmospheric-icon" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+								<path d="M12 2v2"></path><path d="M12 20v2"></path>
+								<circle cx="12" cy="12" r="7"></circle>
+								<path d="M4.93 4.93l1.41 1.41"></path><path d="M17.66 17.66l1.41 1.41"></path>
+								<path d="M2 12h2"></path><path d="M22 12h2"></path>
+								<path d="M6.34 17.66l-1.41 1.41"></path><path d="M19.07 4.93l-1.41 1.41"></path>
+							</svg>
+						</button>
 
+						<button id="theme-toggle" transition:persist class="relative p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-all w-10 h-10 flex items-center justify-center overflow-hidden" aria-label="Toggle Theme">
+							<!-- Sun Icon -->
+							<svg id="sun-icon" class="w-5 h-5 absolute transition-all duration-500 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+								<circle cx="12" cy="12" r="4"></circle>
+								<path d="M12 2v2"></path><path d="M12 20v2"></path>
+								<path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path>
+								<path d="M2 12h2"></path><path d="M22 12h2"></path>
+								<path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path>
+							</svg>
+							<!-- Moon Icon -->
+							<svg id="moon-icon" class="w-5 h-5 absolute transition-all duration-500 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+								<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+							</svg>
+						</button>
+					</div>
 
-					<a href={`mailto:${brand.email}`} class="bg-brand-primary text-white text-[10px] md:text-[11px] uppercase tracking-widest px-4 md:px-6 py-2 md:py-2.5 rounded-full font-bold hover:scale-105 transition-all shadow-lg shadow-brand-primary/20">
+					<button id="contact-btn" class="bg-brand-primary text-white text-[10px] md:text-[11px] uppercase tracking-widest px-4 md:px-6 py-2 md:py-2.5 rounded-full font-bold hover:scale-105 transition-all shadow-lg shadow-brand-primary/20 cursor-pointer">
 						Contact
-					</a>
+					</button>
 				</div>
 			</nav>
 		</header>
+
+		<!-- --- GLOBAL CONTACT MODAL --- -->
+		<div id="contact-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-500 scale-95">
+			<!-- Overlay -->
+			<div id="modal-overlay" class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
+			
+			<!-- Modal Content -->
+			<div class="relative w-full max-w-xl glass p-8 md:p-16 overflow-hidden">
+				<!-- Close Button -->
+				<button id="close-modal" class="absolute top-6 right-6 text-txt/40 hover:text-primary transition-colors cursor-pointer">
+					<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+				</button>
+
+				<div class="text-center mb-8 md:mb-12">
+					<p class="text-[9px] font-mono uppercase tracking-[0.5em] text-primary mb-3">Initialize Protocol</p>
+					<h3 class="item-title text-3xl md:text-5xl font-black uppercase tracking-tighter">Direct Connect</h3>
+				</div>
+
+				<form action={`mailto:${brand.email}`} method="post" enctype="text/plain" class="space-y-6 md:space-y-10">
+					<div class="space-y-2">
+						<label class="text-[10px] uppercase tracking-widest font-bold text-primary">Your Signature</label>
+						<input type="text" name="name" required class="w-full bg-white/5 border-b border-white/10 p-3 outline-none focus:border-primary transition-all font-mono text-sm" placeholder="NAME / ALIAS" />
+					</div>
+					<div class="space-y-2">
+						<label class="text-[10px] uppercase tracking-widest font-bold text-primary">Transmission Node</label>
+						<input type="email" name="email" required class="w-full bg-white/5 border-b border-white/10 p-3 outline-none focus:border-primary transition-all font-mono text-sm" placeholder="YOUR@EMAIL.COM" />
+					</div>
+					<div class="space-y-2">
+						<label class="text-[10px] uppercase tracking-widest font-bold text-primary">Payload</label>
+						<textarea name="message" required rows="3" class="w-full bg-white/5 border-b border-white/10 p-3 outline-none focus:border-primary transition-all font-mono text-sm resize-none" placeholder="INSERT MESSAGE DATA..."></textarea>
+					</div>
+
+					<button type="submit" class="w-full bg-primary text-white py-4 md:py-6 font-black uppercase tracking-[0.3em] text-xs hover:scale-[1.02] transition-all shadow-xl shadow-primary/20">
+						Send Transmission
+					</button>
+				</form>
+			</div>
+		</div>
 
 		<main class="pt-16">
 			<slot />
@@ -201,10 +306,14 @@ const dynamicStyles = `
 					</div>
 
 					<div class="md:col-span-3 text-center md:text-right border-t md:border-t-0 md:border-l border-white/5 pt-12 md:pt-0 md:pl-12">
-						<p class="text-[9px] font-mono uppercase tracking-widest text-brand-primary mb-3">Engine Master</p>
+						<p class="text-[9px] font-mono uppercase tracking-widest text-brand-primary mb-3">Core Architect</p>
 						<p class="text-xl font-black italic tracking-tighter uppercase mb-1">{author.name}</p>
 						<p class="text-txt/30 text-[10px] uppercase tracking-widest mb-6">{author.role}</p>
-						<a href={`mailto:${brand.email}`} class="text-xs font-bold border-b border-brand-primary/30 pb-1 hover:border-brand-primary transition-all tracking-tight">{brand.email}</a>
+						
+						<div class="flex flex-col gap-2 md:items-end">
+							<a href={`mailto:${brand.email}`} class="text-xs font-bold border-b border-brand-primary/30 pb-1 hover:border-brand-primary transition-all tracking-tight">{brand.email}</a>
+							<a href="tel:6643118842" class="text-xs font-medium text-txt/40 hover:text-primary transition-colors tracking-widest">6643118842</a>
+						</div>
 					</div>
 
 				</div>
@@ -229,8 +338,12 @@ const dynamicStyles = `
 		<script define:vars={{ activeSection }}>
 			// Logic for Hybrid Navigation (SPA feel with Clean URLs)
 			document.addEventListener('astro:page-load', () => {
-				// Re-init listener if needed (though transition:persist helps)
-				if (window.__initThemeListener) window.__initThemeListener();
+				// Re-init listener if needed
+				if (window.__initThemeAndStyleListener) window.__initThemeAndStyleListener();
+				
+				// Ensure variant and theme are applied on navigation
+				if (window.applyTheme) window.applyTheme();
+				if (window.applyVariant) window.applyVariant();
 
 				// 1. Initial scroll if we come from an external link or refresh
 				if (activeSection) {
@@ -295,6 +408,28 @@ const dynamicStyles = `
 		opacity: 0; 
 		transform: rotate(90deg) scale(0.5); 
 	}
+
+	
+	/* Variant Toggle Logic */
+	#tactical-icon, #minimal-icon, #atmospheric-icon {
+		position: absolute;
+		opacity: 0;
+		transform: translateY(10px);
+		transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+		pointer-events: none;
+	}
+
+	.tactical #tactical-icon,
+	.minimal #minimal-icon,
+	.atmospheric #atmospheric-icon {
+		opacity: 1;
+		transform: translateY(0);
+		pointer-events: auto;
+	}
+
+	.minimal #tactical-icon, .atmospheric #tactical-icon { transform: translateY(-10px); }
+	.tactical #minimal-icon, .atmospheric #minimal-icon { transform: translateY(10px); }
+	.tactical #atmospheric-icon, .minimal #atmospheric-icon { transform: translateY(10px); }
 
 	
 	/* iOS Safe Area */

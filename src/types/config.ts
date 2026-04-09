@@ -16,6 +16,7 @@ export interface SiteConfig {
     avatar?: string;
   };
   theme: {
+    variant?: 'tactical' | 'minimal' | 'atmospheric';
     colors: {
       primary: string;
       secondary: string;
@@ -30,7 +31,7 @@ export interface SiteConfig {
     };
   };
   socials: {
-    platform: 'github' | 'twitter' | 'linkedin' | 'instagram';
+    platform: 'github' | 'twitter' | 'linkedin' | 'instagram' | 'phone' | 'email';
     url: string;
   }[];
   layout: Section[];
@@ -43,7 +44,8 @@ export type Section =
   | { type: 'metrics-pulse'; id: string; data: MetricsData }
   | { type: 'identity-stack'; id: string; data: IdentityData }
   | { type: 'process-timeline'; id: string; data: TimelineData }
-  | { type: 'tech-carousel'; id: string; data: TechCarouselData };
+  | { type: 'tech-carousel'; id: string; data: TechCarouselData }
+  | { type: 'contact'; id: string; data: ContactData };
 
 export interface TechCarouselData {
 
@@ -86,4 +88,16 @@ export interface IdentityData {
 export interface TimelineData {
   title: string;
   steps: { title: string; date: string; description: string }[];
+}
+
+export interface ContactData {
+  title: string;
+  description: string;
+  formAction?: string;
+  info: {
+    name: string;
+    email: string;
+    phone: string;
+    location?: string;
+  };
 }

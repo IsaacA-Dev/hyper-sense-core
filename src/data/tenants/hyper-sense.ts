@@ -111,6 +111,20 @@ export const siteConfig: SiteConfig = {
           { date: "Fase 03", title: "Despliegue Core", description: "Implementación de los módulos atómicos con optimización de assets." }
         ]
       }
+    },
+    {
+      type: 'contact',
+      id: 'contact-section',
+      data: {
+        title: "Inicia la Conexión",
+        description: "Transformemos tus requerimientos técnicos en interfaces de alto impacto. Estoy listo para el despliegue.",
+        info: {
+          name: "Isaac Gonzalez",
+          email: "isaaca.dev.net@gmail.com",
+          phone: "+52 6643118842",
+          location: "Baja California, México"
+        }
+      }
     }
   ]
 };

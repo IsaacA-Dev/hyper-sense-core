@@ -12,7 +12,7 @@ const { id, data } = Astro.props;
 
 <section {id} class="py-20 md:py-40 px-4 md:px-6 container mx-auto overflow-hidden">
 	<div class="text-center mb-16 md:mb-32">
-		<h2 class="text-4xl md:text-7xl font-black italic uppercase tracking-tighter mb-4">{data.title}</h2>
+		<h2 class="section-title text-4xl md:text-7xl font-black uppercase tracking-tighter mb-4">{data.title}</h2>
 		<div class="flex justify-center gap-2">
 			<div class="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-primary/20"></div>
 			<div class="w-6 h-1.5 md:w-8 md:h-2 rounded-full bg-primary"></div>
@@ -31,7 +31,7 @@ const { id, data } = Astro.props;
 					
 					<!-- Point -->
 					<div class="absolute left-0 md:left-1/2 w-4 h-4 md:w-5 md:h-5 bg-primary rounded-full md:border-4 border-bg -translate-x-1/2 z-20 shadow-[0_0_20px_rgba(var(--brand-primary-rgb),0.8)] md:mt-0 mt-1.5 transition-transform hover:scale-125 duration-300">
-						<div class="absolute inset-0 bg-primary animate-ping rounded-full opacity-40"></div>
+						<div class="absolute inset-0 bg-primary animate-ping rounded-full opacity-40 glow-effect"></div>
 					</div>
 
 
@@ -39,7 +39,7 @@ const { id, data } = Astro.props;
 					<div class="w-full md:w-1/2 pl-8 md:pl-0">
 						<div class={`${index % 2 === 0 ? 'md:text-right' : 'md:text-left'} text-left`}>
 							<span class="text-[10px] md:text-xs font-mono text-primary mb-2 block tracking-widest uppercase">{step.date}</span>
-							<h3 class="text-xl md:text-3xl font-black italic uppercase mb-2 md:mb-4 tracking-tight leading-none">{step.title}</h3>
+							<h3 class="item-title text-xl md:text-3xl font-black uppercase mb-2 md:mb-4 tracking-tight leading-none">{step.title}</h3>
 							<p class="text-txt/50 text-xs md:text-sm leading-relaxed max-w-sm md:mx-0 mx-0 inline-block">{step.description}</p>
 						</div>
 					</div>
